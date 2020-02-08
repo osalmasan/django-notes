@@ -1,42 +1,29 @@
 import React, { Component } from 'react';
 import { Button, Container, Row, Col } from 'reactstrap';
 import ListNotes from './components/ListNotes';
+import {fetchNotes, fetchNote, addNote, updateNote } from './api';
 
-var notes_temp = [
-    {
-        "id": 1,
-        "title": "Django note",
-        "content": "asdasfdasdasd",
-        "created_at": "2020-02-08T10:13:17.594514Z",
-        "updated_at": "2020-02-08T10:13:17.594514Z"
-    },
-    {
-        "id": 2,
-        "title": "Python notes",
-        "content": "daoijoaushdoasd",
-        "created_at": "2020-02-08T10:13:24.960170Z",
-        "updated_at": "2020-02-08T10:13:24.960170Z"
-    },
-    {
-        "id": 3,
-        "title": "PHP",
-        "content": "Dasdasdasosdf",
-        "created_at": "2020-02-08T10:13:35.787983Z",
-        "updated_at": "2020-02-08T10:13:35.787983Z"
-    },
-]
 class App extends Component {
   constructor(props) {
     super(props);
 
     this.state = {
-      notes: notes_temp,
+      notes: [],
       current_note_id: 0,
-      is_creating: true
+      is_creating: true,
+      is_fetching: true
     }
 
     this.handleItemClick = this.handleItemClick.bind(this);
     this.handleAddNote = this.handleAddNote.bind(this);
+    this.getData = this.getData.bind(this);
+  }
+  componentDidMount() {
+      this.getData();
+  }
+  async getData() {
+    let data = await fetchNotes();
+    this.setState({notes: data})
   }
   handleItemClick(id) {
       console.log("Id: ", id);
